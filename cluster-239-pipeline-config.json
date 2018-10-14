@@ -1,0 +1,337 @@
+{
+  "appConfig": {},
+  "disabled": false,
+  "executionEngine": "v3",
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "App-ops-api",
+  "limitConcurrent": true,
+  "notifications": [
+    {
+      "address": "#int-app-spin-ntify",
+      "level": "pipeline",
+      "message": {
+        "pipeline.complete": {
+          "text": "AMI: ${parameters.int_ami}\nInfra Branch: ${parameters.app_rpm}\napp Version: ${parameters.app_version}\n\nPlease start Sanity Testing."
+        },
+        "pipeline.failed": {
+          "text": "AMI: ${parameters.int_ami}\nInfra Branch: ${parameters.app_rpm}\napp Version: ${parameters.app_version}"
+        },
+        "pipeline.starting": {
+          "text": "AMI: ${parameters.int_ami}\nInfra Branch: ${parameters.app_rpm}\napp Version: ${parameters.app_version}"
+        }
+      },
+      "type": "slack",
+      "when": [
+        "pipeline.starting",
+        "pipeline.complete",
+        "pipeline.failed"
+      ]
+    },
+    {
+      "address": "#app-prod-Sanity Testings",
+      "level": "pipeline",
+      "message": {
+        "pipeline.complete": {
+          "text": "AMI: ${parameters.int_ami}\nInfra Branch: ${parameters.app_rpm}\napp Version: ${parameters.app_version}\n\n*`Please Start Sanity Testing.`* :aws:"
+        }
+      },
+      "type": "slack",
+      "when": [
+        "pipeline.complete"
+      ]
+    }
+  ],
+  "parallel": true,
+  "parameterConfig": [
+    {
+      "default": "${execution['buildTime']}",
+      "name": "build_time_stamp"
+    },
+    {
+      "name": "app_version"
+    },
+    {
+      "name": "app_rpm"
+    },
+    {
+      "name": "int_ami"
+    }
+  ],
+  "stages": [
+    {
+      "clusters": [
+        {
+          "account": "app Accounting Prod",
+          "application": "appprodc239",
+          "availabilityZones": {
+            "us-west-2": [
+              "us-west-2a",
+              "us-west-2b",
+              "us-west-2c"
+            ]
+          },
+          "base64UserData": "HyEvYmluL3NoCmV4cG9ydCBVRF9DTFVTVEVSX0VOVj0ncHJvZCcKZXhwb3J0IFVEX0NMVVNURVJfTlVNQkVSPSczOScKZXhwb3J0IFVEX0NMVVNURVJfUkVHSU9OPSd1cycKZXhwb3J0IFVEX0NMVVNURVJfUk9MRT0nYWRtaW4nCmV4cG9ydCBVRF9DTFVTVEVSX1NVQlJPTEU9J3dlYicKZXhwb3J0IFVEX0NPTlNVTF9DTFVTVEVSX05BTUU9J2NvbnN1bC52cGMtYjc4ZDk5ZDAnCmV4cG9ydCBVRF9KQVZBX1ZFUlNJT049JzEuOC4wXzEzMScKZXhwb3J0IFVEX0tNU19JRD0nMjc3ZmVhNmMtNWYwMS00MmU3LWFiZjAtNDM5NTQ0NzlmMzMyJwovYXBwL3NjcmlwdHMvcWJvLWF3cy1zZXR1cC5zaA==",
+          "capacity": {
+            "desired": 1,
+            "max": 1,
+            "min": 1
+          },
+          "cloudProvider": "aws",
+          "cooldown": 10,
+          "copySourceCustomBlockDeviceMappings": false,
+          "ebsOptimized": true,
+          "enabledMetrics": [],
+          "freeFormDetails": "web",
+          "healthCheckGracePeriod": 600,
+          "healthCheckType": "EC2",
+          "iamRole": "int-app-admin-web-iam-instance-profile-InstanceIamProfile-16ECFIU6P8SJQ",
+          "instanceMonitoring": false,
+          "instanceType": "c4.2xlarge",
+          "keyPair": "int-app-prod-ops-us-west-2",
+          "loadBalancers": [
+            "appprodc239-adw-S"
+          ],
+          "maxRemainingAsgs": 2,
+          "provider": "aws",
+          "scaleDown": true,
+          "securityGroups": [
+            "sg-7a4ad100",
+            "sg-c54178be",
+            "sg-73078509"
+          ],
+          "stack": "admin_frontend",
+          "strategy": "redblack",
+          "subnetType": "PrivateSubnet",
+          "suspendedProcesses": [],
+          "tags": {
+            "Name": "app-prod-239-${parameters.build_time_stamp}-admin-web",
+            "app:asg:timestamp": "${ parameters.build_time_stamp }",
+            "app:cluster:env": "prod",
+            "app:cluster:number": "239",
+            "app:cluster:region": "us",
+            "app:cluster:role": "admin",
+            "app:cluster:subrole": "web",
+            "app:consul:clustername": "consul.vpc-abcdefgh",
+            "app:java:version": "1.8.0_131",
+            "app:kms-id": "377fea6c-5f01-42e7-abf0-43954479f332",
+            "app:version": "${ parameters.app_version }"
+          },
+          "targetGroups": [],
+          "targetHealthyDeployPercentage": 100,
+          "terminationPolicies": [
+            "Default"
+          ],
+          "useAmiBlockDeviceMappings": true
+        }
+      ],
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "deploy_admin_web",
+      "overrideTimeout": true,
+      "refId": "2",
+      "requisiteStageRefIds": [
+        "13"
+      ],
+      "stageTimeoutMs": 1800000,
+      "type": "deploy"
+    },
+    {
+      "clusters": [
+        {
+          "account": "app Accounting Prod",
+          "application": "appprodc239",
+          "availabilityZones": {
+            "us-west-2": [
+              "us-west-2a",
+              "us-west-2b",
+              "us-west-2c"
+            ]
+          },
+          "base64UserData": "HyEvYmluL3NoCmV4cG9ydCBVRF9DTFVTVEVSX0VOVj0ncHJvZCcKZXhwb3J0IFVEX0NMVVNURVJfTlVNQkVSPSczOScKZXhwb3J0IFVEX0NMVVNURVJfUkVHSU9OPSd1cycKZXhwb3J0IFVEX0NMVVNURVJfUk9MRT0nYXBwJwpleHBvcnQgVURfQ0xVU1RFUl9TVUJST0xFPSd3ZWInCmV4cG9ydCBVRF9DT05TVUxfQ0xVU1RFUl9OQU1FPSdjb25zdWwudnBjLWI3OGQ5OWQwJwpleHBvcnQgVURfSkFWQV9WRVJTSU9OPScxLjguMF8xMzEnCmV4cG9ydCBVRF9LTVNfSUQ9JzI3N2ZlYTZjLTVmMDEtNDJlNy1hYmYwLTQzOTU0NDc5ZjMzMicKL2FwcC9zY3JpcHRzL3Fiby1hd3Mtc2V0dXAuc2g=",
+          "capacity": {
+            "desired": 1,
+            "max": 2,
+            "min": 1
+          },
+          "cloudProvider": "aws",
+          "cooldown": 10,
+          "copySourceCustomBlockDeviceMappings": false,
+          "ebsOptimized": true,
+          "enabledMetrics": [],
+          "freeFormDetails": "web",
+          "healthCheckGracePeriod": 600,
+          "healthCheckType": "EC2",
+          "iamRole": "int-app-web-iam-instance-profile-InstanceIamProfile-XR2PAD86W40D",
+          "instanceMonitoring": false,
+          "instanceType": "c4.2xlarge",
+          "keyPair": "int-app-prod-ops-us-west-2",
+          "loadBalancers": [
+            "appprodc239-apw-S"
+          ],
+          "maxRemainingAsgs": 2,
+          "provider": "aws",
+          "scaleDown": true,
+          "securityGroups": [
+            "sg-d0c945aa",
+            "sg-c54178be",
+            "sg-73078509"
+          ],
+          "stack": "app_frontend",
+          "strategy": "redblack",
+          "subnetType": "PrivateSubnet",
+          "suspendedProcesses": [],
+          "tags": {
+            "Name": "app-prod-239-${parameters.build_time_stamp}-app-web",
+            "app:asg:timestamp": "${ parameters.build_time_stamp }",
+            "app:cluster:env": "prod",
+            "app:cluster:number": "239",
+            "app:cluster:region": "us",
+            "app:cluster:role": "app",
+            "app:cluster:subrole": "web",
+            "app:consul:clustername": "consul.vpc-abcdefgh",
+            "app:java:version": "1.8.0_131",
+            "app:kms-id": "377fea6c-5f01-42e7-abf0-43954479f332",
+            "app:version": "${ parameters.app_version }"
+          },
+          "targetGroups": [],
+          "targetHealthyDeployPercentage": 100,
+          "terminationPolicies": [
+            "Default"
+          ],
+          "useAmiBlockDeviceMappings": true,
+          "useSourceCapacity": false
+        }
+      ],
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "deploy_app_web",
+      "overrideTimeout": true,
+      "refId": "5",
+      "requisiteStageRefIds": [
+        "13"
+      ],
+      "stageTimeoutMs": 1800000,
+      "type": "deploy"
+    },
+    {
+      "comments": "",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "customHeaders": {
+        "St2-Api-Key": "NjYxOTk0ZGU0OTNmODFkMTAzMDJjMWYwMjhkNzI1NjYyZWVjYjJlMTRlNDUyMTZlNjI5YmUwZWQ0ODMxMDI4OA"
+      },
+      "failPipeline": false,
+      "method": "POST",
+      "name": "deploy_start",
+      "payload": {
+        "PipelineName": "${execution['name'] ?: ''}",
+        "desc": [
+          "int.app.App ${execution['name'] ?: ''}",
+          "${parameters.app_rpm}",
+          "${parameters.app_version}"
+        ],
+        "id": "${execution['id'] ?: ''}",
+        "source": [
+          "${execution['application'] ?: ''}"
+        ],
+        "stageName": "${#stage('deploy_start')['name']}",
+        "startdeploy": "${#stage('deploy_start')['startTime']}",
+        "starttime": "${#stage('deploy_start')['startTime']}",
+        "status": "${#stage('deploy_start')['status']}",
+        "tags": [
+          "int.app.App",
+          "STARTED",
+          "prod",
+          "c239",
+          "${parameters.app_rpm}",
+          "${parameters.app_version}"
+        ],
+        "type": "Deploy"
+      },
+      "refId": "11",
+      "requisiteStageRefIds": [
+        "14"
+      ],
+      "statusUrlResolution": "getMethod",
+      "type": "webhook",
+      "url": "https://stackstorm.dev.int.com/api/v1/webhooks/App-deploy"
+    },
+    {
+      "comments": "",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "customHeaders": {
+        "St2-Api-Key": "NjYxOTk0ZGU0OTNmODFkMTAzMDJjMWYwMjhkNzI1NjYyZWVjYjJlMTRlNDUyMTZlNjI5YmUwZWQ0ODMxMDI4OA"
+      },
+      "failPipeline": false,
+      "method": "POST",
+      "name": "deploy_end",
+      "payload": {
+        "PipelineName": "${execution['name'] ?: ''}",
+        "desc": [
+          "int.app.App ${execution['name'] ?: ''}",
+          "${parameters.app_rpm}",
+          "${parameters.app_version}"
+        ],
+        "endTime": "${#stage('deploy_end')['startTime']}",
+        "enddeploy": "${#stage('deploy_end')['startTime']}",
+        "id": "${execution['id'] ?: ''}",
+        "source": [
+          "${execution['application'] ?: ''}"
+        ],
+        "stageName": "${#stage('deploy_start')['name']}",
+        "startEndDeploy": "${#stage('deploy_start')['startTime']}",
+        "starttime": "${#stage('deploy_start')['startTime']}",
+        "status": "${#stage('deploy_start')['status']}",
+        "tags": [
+          "int.app.App",
+          "SUCCEEDED",
+          "prod",
+          "c239",
+          "web",
+          "${parameters.app_rpm}",
+          "${parameters.app_version}"
+        ],
+        "type": "Deploy"
+      },
+      "refId": "12",
+      "requisiteStageRefIds": [
+        "5",
+        "2"
+      ],
+      "statusUrlResolution": "getMethod",
+      "type": "webhook",
+      "url": "https://stackstorm.dev.int.com/api/v1/webhooks/App-deploy"
+    },
+    {
+      "name": "jitter_wait",
+      "refId": "13",
+      "requisiteStageRefIds": [
+        "11"
+      ],
+      "type": "wait",
+      "waitTime": "${ T(java.lang.Math).random() * 100 }"
+    },
+    {
+      "cloudProvider": "aws",
+      "cloudProviderType": "aws",
+      "name": "find_image_from_tags",
+      "packageName": "${parameters.app_rpm}",
+      "refId": "14",
+      "regions": [
+        "us-west-2"
+      ],
+      "requisiteStageRefIds": [],
+      "tags": {
+        "int_ami": "${parameters.int_ami}",
+        "app_rpm": "${parameters.app_rpm}",
+        "app_version": "${parameters.app_version}"
+      },
+      "type": "findImageFromTags"
+    }
+  ],
+  "triggers": [],
+  "updateTs": "1531337675000"
+}
